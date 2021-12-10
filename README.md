@@ -1,5 +1,5 @@
 //* Student Profile Portal Application for Zoho*/
-/* developed by Parvathi Sankari on Parvathi on 06-Dec-2021*/
+/* developed by Parvathi on 06-Dec-2021*/
 
 Open command prompt, Execute following commands
 
