@@ -4,18 +4,15 @@
 	<title> Signup Form</title>
 		
 	<link rel="stylesheet"
-	href=
-	"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	integrity=
-	"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	crossorigin="anonymous">
-
+	href= 	"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	
+	
 		
 <link rel="stylesheet" type="text/css" href="style.css">
 		
 </head>
 <body>
-	
+	<img src="basic-rgb-183914580.jpg" alt="portal icon" width="128" height="128" >
 	<br>
 	<br>
 	<br>
@@ -29,8 +26,8 @@
 					
 			<form action="/sign_up" method="post">
 					
-			<h1> Signup form </h1>
-							
+			
+			<h1> Welcome To Zoho Student Portal</h1>				
 			<input class="box" type="text" name="name" id="name"
 			placeholder="Name" required /><br>
 							
@@ -45,27 +42,35 @@
 						
 			<input class="box" type="text" name="department" id="department"
 			placeholder="Department " required/><br>
-						<br>
+			<br>
 
-	<label for="skills">Choose skills:</label>
-
-		<select id="Skills">
-		<option value="C++"> C++ </option>
-		<option value="Java"> Java </option>
-		<option value="Python"> Python</option>
-		<option value="Perl"> Perl</option>
+		<label for="skills">Choose skills:</label>
+		<select name ="skills" id="skills">
+		<option> C++ </option>
+		<option> Java </option>
+		<option> Python</option>
+		<option> Perl</option>
 		</select>
+
+		<p><input type="file"  accept="image/*" name="image" id="file"  onchange="loadFile(event)" style="display: none;"></p>
+		<p><label for="file" style="cursor: pointer;"> Upload Your Photo  </label></p>
+		<p><img id="output" width="200" /></p>
+		
+		<script>
+		var loadFile = function(event) {
+			var image = document.getElementById('output');
+			image.src = URL.createObjectURL(event.target.files[0]);
+		};
+		</script>
+		
+
     <br>
-
-
 			<input type="submit" id="submitDetails"
 			name="submitDetails" value="Submit" /><br>
 					
-			</form>
-					
-		</div>
-				
-				
+	</form>
+	</div>
+			
 		<div class="col-md-3">
 		</div>
 				
