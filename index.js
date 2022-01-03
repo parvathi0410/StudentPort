@@ -8,12 +8,14 @@ d.	CSS-3
 /*developed by Parvathi Sankari on Parvathi on 06-Dec-2021 */
 
 
-//Initilaise the app
+//Initilaise the reuired dependecies
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 var bodyParser=require("body-parser")
 var mongoose = require("mongoose")
+const multer = require("multer")
+const path = require("path")
 
  require('./authsa');
 
@@ -43,6 +45,16 @@ var db = mongoose.connection;
 db.on('error',()=>console.log("Error in Connecting to Database"));
 db.once('open',()=>console.log("Connected to Database"))
 
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+
+      // Uploads is the Upload_folder_name
+      cb(null, "uploads")
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now()+".jpg")
+  }
+})
 
 //whenever user visits the url, google link to login
 app.get('/', (req, res) => {
@@ -62,9 +74,7 @@ app.get('/auth/google/callback',
 );
 
 app.get('/protected',isLoggedIn, (req, res) => {
-   // res.send(`Hello ${ req.user.displayName}`);
-   //res.send('<a href = "https://www.w3schools.com/"> Visit W3Schools.com! </a>');
-   res.send('<a href = "welcome.html"> Click here for Zoho Student Portal </a>');
+    res.send('<a href = "welcome.html"> Click here for Zoho Student Portal </a>');
     
   });
   
@@ -102,6 +112,57 @@ db.collection('users').insertOne(data,(err,collection)=>{
       console.log("Record Inserted Successfully");
   });
 return res.redirect('signup_success.html')
+})
+
+// Define the maximum size for uploading
+// file i.e. 1 MB. it is optional
+const maxSize = 1 * 1000 * 1000;
+    
+var upload = multer({ 
+    storage: storage,
+    limits: { fileSize: maxSize },
+    fileFilter: function (req, file, cb){
+    
+        // Set the filetypes, it is optional
+        var filetypes = /jpeg|jpg|pdf|doc|png/;
+        var mimetype = filetypes.test(file.mimetype);
+  
+        var extname = filetypes.test(path.extname(
+                    file.originalname).toLowerCase());
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+      
+        cb("Error: File upload only supports the "
+                + "following filetypes - " + filetypes);
+      } 
+  
+// myprofile is the name of file attribute
+}).single("myprofile");       
+  
+app.get("/",function(req,res){
+    res.render("Signup");
+})
+    
+app.post("/uploadProfile",function (req, res, next) {
+        
+    // Error MiddleWare for multer file upload, so if any
+    // error occurs, the file would not be uploaded!
+    upload(req,res,function(err) {
+  
+        if(err) {
+  
+            // ERROR occurs due to uploading file of size greater than
+            // 1MB or uploading different file type)
+            res.send(err)
+        }
+        else {
+  
+            // SUCCESS, file successfully uploaded
+                       res.send("Thank you !! Your Profile is uploaded!")
+        }
+    })
 })
 
 app.listen(5000, () => console.log('listening on port: 5000'));
